@@ -41,7 +41,7 @@ jobs:
       # Step 6: Backup Current Deployment on Server 2 (Low Load, 20%)
       - name: Backup Current Deployment on Server 2
         env:
-          SERVER_IP: 44.204.49.192 # Server 2 IP (20% load)
+          SERVER_IP: 44.201.117.223 # Server 2 IP (20% load)
           SSH_USER: ec2-user
           DEPLOY_DIR: /var/www/html
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Deploy to Server 2
         if: success() # This step only runs if the tests pass
         env:
-          SERVER_IP: 44.204.49.192 # Server 2 IP
+          SERVER_IP: 44.201.117.223 # Server 2 IP
           SSH_USER: ec2-user
           DEPLOY_DIR: /var/www/html
         run: |
@@ -91,7 +91,7 @@ jobs:
       - name: Verify Deployment on Server 2
         if: success() # Runs if the previous step succeeded
         env:
-          SERVER_IP: 44.204.49.192 # Server 2 IP
+          SERVER_IP: 44.201.117.223 # Server 2 IP
           SSH_USER: ec2-user
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
@@ -111,7 +111,7 @@ jobs:
       - name: Backup Current Deployment on Server 1 - Only if Server 2 is fine
         if: success() # Runs if Server 2 deployment verification succeeded
         env:
-          SERVER_IP: 3.88.26.33 # Server 1 IP (80% load)
+          SERVER_IP: 3.87.26.172 # Server 1 IP (80% load)
           SSH_USER: ec2-user
           DEPLOY_DIR: /var/www/html
         run: |
@@ -134,7 +134,7 @@ jobs:
       - name: Deploy to Server 1
         if: success() # Runs only if the previous steps succeeded
         env:
-          SERVER_IP: 3.88.26.33 # Server 1 IP
+          SERVER_IP: 3.87.26.172 # Server 1 IP
           SSH_USER: ec2-user
           DEPLOY_DIR: /var/www/html
         run: |
@@ -162,7 +162,7 @@ jobs:
       - name: Rollback Deployment (If Tests Failed)
         if: failure() # This step only runs if the tests fail
         env:
-          SERVER_IP: 44.204.49.192 # Server 2 IP
+          SERVER_IP: 44.201.117.223 # Server 2 IP
           SSH_USER: ec2-user
           DEPLOY_DIR: /var/www/html
         run: |
