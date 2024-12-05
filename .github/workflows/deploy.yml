@@ -38,28 +38,28 @@ jobs:
           npm run build --prod
           tar -czf dist.tar.gz -C dist/sample-pwa .
 
-      # Step 6: Backup Current Deployment on Server 2 (Low Load, 20%).
-      - name: Backup Current Deployment on Server 2
-        env:
-          SERVER_IP: 44.201.117.223 # Server 2 IP (20% load)
-          SSH_USER: ec2-user
-          DEPLOY_DIR: /var/www/html
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
+      # # Step 6: Backup Current Deployment on Server 2 (Low Load, 20%).
+      # - name: Backup Current Deployment on Server 2
+      #   env:
+      #     SERVER_IP: 44.201.117.223 # Server 2 IP (20% load)
+      #     SSH_USER: ec2-user
+      #     DEPLOY_DIR: /var/www/html
+      #   run: |
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+      #     chmod 600 private_key.pem
 
-          # Backup the current deployed version on Server 2
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $SSH_USER@$SERVER_IP << EOF
-            # sudo rm -rf /home/$SSH_USER/move
-            # sudo mv /home/$SSH_USER/backup /home/$SSH_USER/move
-            sudo cp -r $DEPLOY_DIR /home/$SSH_USER/backup
-            sudo tar -czf /home/$SSH_USER/backup.tar.gz -C /home/$SSH_USER backup
-          EOF
+      #     # Backup the current deployed version on Server 2
+      #     ssh -i private_key.pem -o StrictHostKeyChecking=no $SSH_USER@$SERVER_IP << EOF
+      #       sudo rm -rf /home/$SSH_USER/move
+      #       sudo mv /home/$SSH_USER/backup /home/$SSH_USER/move
+      #       sudo cp -r $DEPLOY_DIR /home/$SSH_USER/backup
+      #       sudo tar -czf /home/$SSH_USER/backup.tar.gz -C /home/$SSH_USER backup
+      #     EOF
 
-          # Clean up private key
-          rm private_key.pem
+      #     # Clean up private key
+      #     rm private_key.pem
 
-      # Step 7: Deploy to Server 2 (Low Load, 20%).
+      # Step 7: Deploy to Server 2 (Low Load, 20%)
       - name: Deploy to Server 2
         if: success() # This step only runs if the tests pass
         env:
